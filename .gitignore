@@ -1,6 +1,15 @@
+# Java Files #
 *.class
+
+# Eclipse Files #
+*.classpath
+*.project
+*.settings
 
 # Package Files #
 *.jar
 *.war
 *.ear
+*.zip
+*.jpg
+oldStuff/*
