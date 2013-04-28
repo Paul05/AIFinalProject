@@ -13,3 +13,4 @@
 *.zip
 *.jpg
 oldStuff/*
+/build
