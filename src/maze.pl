@@ -88,15 +88,27 @@ edge((1,4),(2,4)).
 edge((2,4),(3,4)).
 edge((3,4),(4,4)).
 edge((4,4),(4,3)).
-edge((1,5),(1,6)).
+edge((1,5),(2,5)).
+edge((2,5),(2,4)).
+edge((2,5),(3,5)).
+edge((3,5),(3,4)).
+edge((3,5),(4,5)).
+edge((4,5),(4,4)).
+edge((4,5),(5,5)).
+edge((5,5),(5,4)).
+edge((5,4),(4,4)).
+edge((5,4),(5,3)).
+edge((5,3),(5,2)).
+edge((5,2),(4,2)).
+edge((5,2),(5,1)).
 
 %convience predicate to make true the reverse of all the edge/2 predicates
 conn(X,Y):-edge(X,Y).
 conn(X,Y):-edge(Y,X).
 
 %for testing
-start( (1,6) ).
-manStart( (1,6) ).
+start( (1,5) ).
+manStart( (1,5) ).
 monsterStart( (5,3) ).
 goal( (5,1) ).
 treasure( (2,1) ).
