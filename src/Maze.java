@@ -13,9 +13,12 @@ public class Maze
 	if (mazeFile.isFile())	{
 		Prolog2JavaGameMovesTransfer transferMoves = new Prolog2JavaGameMovesTransfer(mazeFile);
 		
+		//this is where the inputs for the game start will go
+		transferMoves.initPositions(1,5,5,1,2,3);
+		
 		GameMoves testMoves = transferMoves.getGameMoves();
 		
-		System.out.print("Human moves= ");
+		System.out.print("Human moves=   ");
 		for (int h=0; h < testMoves.getHumanMoves().length; h++)
 		{
 			System.out.print(testMoves.getHumanMoves()[h] +", ");

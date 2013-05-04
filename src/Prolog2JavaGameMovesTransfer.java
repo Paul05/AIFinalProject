@@ -11,8 +11,9 @@ import jpl.Variable;
  * Transfer class that given a prolog file
  * calls the game logic to get moves for
  * a human and a monster in grid pair form.
- * Initialize with a file and call getGameMoves() 
- * to get the moves which retruns a GameMoves object
+ * Initialize constructor with a file, 
+ * then call initPositions(...) to set up the game board
+ * and call getGameMoves() to get the moves which retruns a GameMoves object
  * with two integer arrays.
  */
 public class Prolog2JavaGameMovesTransfer {
@@ -20,6 +21,12 @@ public class Prolog2JavaGameMovesTransfer {
 	private File mazeFile; 
 	private Variable Human;
 	private Variable Monster;
+	private jpl.Integer explorerStartX;
+	private jpl.Integer explorerStartY;
+	private jpl.Integer monsterStartX;
+	private jpl.Integer monsterStartY;
+	private jpl.Integer goldRoomX;
+	private jpl.Integer goldRoomY;
 	
 	
 	public Prolog2JavaGameMovesTransfer(File gameLogicFile) {
@@ -28,7 +35,24 @@ public class Prolog2JavaGameMovesTransfer {
 		this.Monster = new Variable("Monster");
 	}
 	
-		
+	/**
+	 * Call this method before calling getGameMoves(), to set up the position of the explorer, monster and gold
+	 * @param expStartX X-coordinate of the explorers start room
+	 * @param expStartY Y-coordinate of the explorers start room
+	 * @param monStartX X-coordinate of the monsters start room
+	 * @param monStartY Y-coordinate of the monsters start room
+	 * @param goldX X-coordinate of the treasure room
+	 * @param goldY Y-coordinate of the treasure room
+	 */
+	public void initPositions(int expStartX, int expStartY, int monStartX, int monStartY, int goldX, int goldY) {
+		this.explorerStartX = new jpl.Integer(expStartX);
+		this.explorerStartY = new jpl.Integer(expStartY);
+		this.monsterStartX = new jpl.Integer(monStartX);
+		this.monsterStartY = new jpl.Integer(monStartY);
+		this.goldRoomX = new jpl.Integer(goldX);
+		this.goldRoomY = new jpl.Integer(goldY);
+	}
+	
 	public GameMoves getGameMoves()
 	{
 		int[] humanMovesOut = null;
@@ -48,7 +72,8 @@ public class Prolog2JavaGameMovesTransfer {
 			
 		   
 			
-			Query playGameBFS = new Query("playGameBFS", new Term[] {Human, Monster});
+			Query playGameBFS = new Query("playGame", new Term[] {explorerStartX, explorerStartY,
+					monsterStartX, monsterStartY, goldRoomX, goldRoomY, Human, Monster});
 		    
 			@SuppressWarnings("rawtypes")
 			Hashtable gameDisplay = playGameBFS.oneSolution(); //can change here to get more solutions etc. 

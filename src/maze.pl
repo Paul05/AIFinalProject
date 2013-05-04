@@ -110,7 +110,7 @@ conn(X,Y):-edge(Y,X).
 start( (1,5) ).
 manStart( (1,5) ).
 monsterStart( (5,3) ).
-goal( (5,1) ).
+goal( (1,1) ).
 treasure( (2,1) ).
 %==================================DFS search=======================================================================
 %does not really work only for VERY simple solutions
