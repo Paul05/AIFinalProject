@@ -110,7 +110,7 @@ conn(X,Y):-edge(Y,X).
 start( (1,5) ).
 manStart( (1,5) ).
 monsterStart( (5,3) ).
-goal( (5,1) ).
+goal( (1,1) ).
 treasure( (2,1) ).
 %==================================DFS search=======================================================================
 %does not really work only for VERY simple solutions
@@ -376,14 +376,18 @@ hval(Node, Goal, Hval):-Node = (Room, _PathSoFar, _Fval),
 %	 else: playgame
 
 %playGame/5 main predicate to play game with A*/forward checking
-%1 ManStart room
-%2 Monster Start room
-%3 Room Gold is in
-%4 Returns a list of explorer Moves
-%5 Returns a list of monster Moves
-playGame(Start, MonStart, Gold, ExplorerMoves, MonsterMoves):-goal(Exit),
-		gamePlay((Start, Gold),(MonStart), Exit, Gold, GameExplorerMoves, GameMonsterMoves),
-		ExplorerMoves = [ Start|GameExplorerMoves], MonsterMoves = [MonStart|GameMonsterMoves].
+%1 ManStart room X-coord
+%2 ManStart room Y-coord
+%3 Monster Start room X-coord
+%4 Monster Start room Y-coord
+%5 Room Gold is in X-coord
+%6 Room Gold is in Y-coord
+%7 Returns a list of explorer Moves
+%8 Returns a list of monster Moves
+playGame(ExpX, ExpY, MonX, MonY, GoldX, GoldY, ExplorerMoves, MonsterMoves):-ExpStart = (ExpX, ExpY),
+		MonStart = (MonX, MonY), Gold = (GoldX, GoldY), goal(Exit),
+		gamePlay((ExpStart, Gold),(MonStart), Exit, Gold, GameExplorerMoves, GameMonsterMoves),
+		ExplorerMoves = [ExpStart|GameExplorerMoves], MonsterMoves = [MonStart|GameMonsterMoves].
 
 %gamePlay/6 is the main predicate of the game serves as the game engine and also contains the Knowledge Base of the Game
 %1 ManState
