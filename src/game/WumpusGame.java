@@ -24,6 +24,8 @@ public class WumpusGame
 	private Goal gold;
 	private File prolog;
 	
+	private final String goldText = "$$$ Gold $$$";
+	
 	public WumpusGame( )
 	{
 		super();
@@ -36,7 +38,7 @@ public class WumpusGame
 	{
 		this.gameBoard = gameBoard;
 		monsterTurn = false;
-		gold = new Goal( 5, 1 );
+		gold = new Goal( 2, 3 );
 		prolog = null;
 		
 	}
@@ -72,6 +74,8 @@ public class WumpusGame
 		{
 			jpl = new Prolog2JavaGameMovesTransfer( prolog );
 			
+			jpl.initPositions(1,5,5,1,2,3);
+			
 			moves = jpl.getGameMoves();
 			agent = new HumanAgent( moves.getHumanMoves(), gameBoard, "Dr.Bansal", gold );
 			monster = new Agent( moves.getMonsterMoves(), gameBoard, "Wumpus");
@@ -88,13 +92,16 @@ public class WumpusGame
 			for( int ii = 0; ii <gameBoard[i].length; ii++ )
 				gameBoard[i][ii].setText("");
 		
+		updateSquare( gameBoard[gold.getGoldX()][gold.getGoldY()], gold.getGoldX(), gold.getGoldY());
+		
 		agent.move();
+		updateSquare(gameBoard[agent.getX()][agent.getY()], agent.getX(), agent.getY() );
+		
 		monster.move();
+		updateSquare(gameBoard[monster.getX()][monster.getY()], monster.getX(), monster.getY() );
 		
 		agent.printMoves();
 		monster.printMoves();
-		
-		gameBoard[gold.getGoldX() - 1][gold.getGoldY() - 1].setText( "$$$ Gold $$$" );
 		
 	}
 	
@@ -107,6 +114,8 @@ public class WumpusGame
 				agent.move();
 				monsterTurn = true;
 				
+				updateSquare(gameBoard[agent.getX()][agent.getY()], agent.getX(), agent.getY() );
+				
 				if( agent.isRich( ) )
 				{
 					done = true;
@@ -117,6 +126,8 @@ public class WumpusGame
 				monster.move();
 				monsterTurn = false;
 				
+				updateSquare(gameBoard[monster.getX()][monster.getY()], monster.getX(), monster.getY() );
+				
 				if( (agent.getX() == monster.getX( ) ) && (agent.getY( ) == monster.getY( ) ) )
 				{
 					Log.out( agent.getName() + " has been eaten by " + monster.getName() );
@@ -125,6 +136,25 @@ public class WumpusGame
 				}
 			}
 		}
-
-	}	
+	}
+	
+	private void updateSquare( TextArea square, int x, int y )
+	{
+		String value = "";
+		
+		square.clear();
+		
+		if( gold.foundGold(x, y) )
+			value += goldText + "\n";
+		else
+			value += "\n";
+		
+		if( agent.isHere(x, y))
+			value += agent.getName() + "\n";
+		
+		if( monster.isHere(x, y))
+			value += monster.getName() + "\n";
+		
+		square.setText(value);			
+	}
 }

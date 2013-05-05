@@ -6,8 +6,8 @@ public class Goal
 
 	public Goal(int goldX, int goldY ) 
 	{
-		this.goldX = goldX;
-		this.goldY = goldY;
+		this.goldX = goldX - 1;
+		this.goldY = goldY - 1;
 	}
 
 	public int getGoldX() {

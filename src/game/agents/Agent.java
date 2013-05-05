@@ -77,12 +77,16 @@ public class Agent
 	{
 		this.name = name;
 	}
+	
+	public boolean isHere( int x, int y )
+	{
+		return ( this.x == x && this.y == y );
+	}
 
 	public void move( )
 	{
 		if( (turn + 1) <= moves.length - 1)
 		{
-			String newMove;
 			gameBoard[x][y].setText("");
 			
 			x = moves[turn] - 1;
@@ -91,11 +95,6 @@ public class Agent
 			turn += 1;
 			
 			Log.out(name + ": is moving to ( " + ( x + 1 ) + ", " + (y + 1) + " )");
-			
-			newMove = gameBoard[x][y].getText();
-			newMove += "\n" + name;			
-		
-			gameBoard[x][y].setText( newMove );
 		}
 	}
 

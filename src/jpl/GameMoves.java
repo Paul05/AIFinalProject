@@ -1,3 +1,4 @@
+package jpl;
 
 /**
  * Basic class to hold two integer arrays for the grid moves of 

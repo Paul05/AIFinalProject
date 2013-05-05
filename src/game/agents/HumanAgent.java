@@ -18,7 +18,7 @@ public class HumanAgent extends Agent
 	
 	public boolean isRich() 
 	{
-		if( gold.foundGold( getX() + 1, getY() + 1 ) )
+		if( gold.foundGold( getX(), getY()) )
 		{
 			Log.out("$$ Found the Gold $$");
 			return true;

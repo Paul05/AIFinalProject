@@ -1,6 +1,9 @@
+package jpl;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.lang.Integer;
 import jpl.Atom;
 import jpl.Query;
 import jpl.Term;
