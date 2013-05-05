@@ -74,9 +74,27 @@ public class WumpusGame
 		{
 			jpl = new Prolog2JavaGameMovesTransfer( prolog );
 			
+			jpl.loadFile();
+			
 			jpl.initPositions(1,5,5,1,2,3);
 			
 			moves = jpl.getGameMoves();
+			
+			//test block to test monsterDeadGetPathToGoal method seems to work
+			GameMoves temp = jpl.monsterDeadGetPathToGoal(1, 1, 3, 3);
+			int mov[] =temp.getHumanMoves();
+			int mov1[] =temp.getMonsterMoves();
+			System.out.print("human moves= ");
+			for (int i = 0 ; i < mov.length; i++){
+				System.out.print(mov[i]+ ", ");
+			}
+			System.out.println();
+			System.out.print("monster moves= ");
+			for (int i = 0 ; i < mov1.length; i++){
+				System.out.print(mov1[i]+ ", ");
+			}
+			System.out.println();
+			
 			agent = new HumanAgent( moves.getHumanMoves(), gameBoard, "Dr.Bansal", gold );
 			monster = new Agent( moves.getMonsterMoves(), gameBoard, "Wumpus");
 			

@@ -128,6 +128,8 @@ searchTreeDFS(Start, Goal, PathSoFar, State):-conn(Start, NextRoom), \+ member(N
 solveDFS(States):-start(Start),
 	     goal(Goal),
 	     searchTreeDFS(Start, Goal, [Start], States).
+	    
+noMonSearch(Stx, Sty, Goalx, Goaly, Result):-searchTreeDFS((Stx, Sty),(Goalx, Goaly),[(Stx,Sty)],Result).	    
 
 %simple algorthim for gameplay:
 %playgame:-playermoves call path, get next move from Path variable then move player there

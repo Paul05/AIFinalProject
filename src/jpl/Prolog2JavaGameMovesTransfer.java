@@ -30,7 +30,10 @@ public class Prolog2JavaGameMovesTransfer {
 	private jpl.Integer monsterStartY;
 	private jpl.Integer goldRoomX;
 	private jpl.Integer goldRoomY;
-	
+	private jpl.Integer stX;
+	private jpl.Integer stY;
+	private jpl.Integer goalX;
+	private jpl.Integer goalY;
 	
 	public Prolog2JavaGameMovesTransfer(File gameLogicFile) {
 		this.mazeFile = gameLogicFile; 				
@@ -56,13 +59,8 @@ public class Prolog2JavaGameMovesTransfer {
 		this.goldRoomY = new jpl.Integer(goldY);
 	}
 	
-	public GameMoves getGameMoves()
-	{
-		int[] humanMovesOut = null;
-		int[] monsterMovesOut = null;	
-		
+	public void loadFile() {
 		try{
-			
 			System.out.println("\nFile Path = " +mazeFile.getCanonicalPath() +" \n"); 
 			
 			Query consultQuery = new Query("consult", new Term[] {
@@ -72,8 +70,22 @@ public class Prolog2JavaGameMovesTransfer {
 			System.out.println( "consult " + (consultQuery.hasSolution() ? "succeeded\n" : "failed"));		 	
 			
 			consultQuery.close();
-			
-		   
+		
+		} catch (NumberFormatException n) {
+			System.out.println("\n***Error Accessing Number***\n");
+			n.printStackTrace();
+		} catch (IOException e)	{
+			System.out.println("\n***Error Reading File!***\n");
+			e.printStackTrace();
+		}//end try/catch
+	}
+	
+	public GameMoves getGameMoves()
+	{
+		int[] humanMovesOut = null;
+		int[] monsterMovesOut = null;	
+		
+		try{
 			
 			Query playGameBFS = new Query("playGame", new Term[] {explorerStartX, explorerStartY,
 					monsterStartX, monsterStartY, goldRoomX, goldRoomY, Human, Monster});
@@ -108,13 +120,63 @@ public class Prolog2JavaGameMovesTransfer {
 		} catch (NumberFormatException n) {
 			System.out.println("\n***Error Accessing Number***\n");
 			n.printStackTrace();
-		} catch (IOException e)	{
-			System.out.println("\n***Error Reading File!***\n");
-			e.printStackTrace();
-		}//end try/catch
+		}
 		
 		return new GameMoves(humanMovesOut, monsterMovesOut);
 	
 	} //end getGameMoves method
 
+	/**
+	 * This predicate is called once wumpus is dead, it implements a DFS search from a start coordinate to a goal coordinate
+	 * @param stX	x-coordinate of the start room
+	 * @param stY	x-coordinate of the start room
+	 * @param goalX	x-coordinate of the start room
+	 * @param goalY	x-coordinate of the start room
+	 * @return	a GameMove object with the monster array empty, and the human array with the path from start to goal
+	 */
+	public GameMoves monsterDeadGetPathToGoal(int stX, int stY, int goalX, int goalY) {
+		
+		this.stX = new jpl.Integer(stX) ;
+		this.stY = new jpl.Integer(stY) ;
+		this.goalX = new jpl.Integer(goalX) ;
+		this.goalY = new jpl.Integer(goalY) ;
+		
+		Variable output = new Variable("Result");
+		
+		int[] resultMovesOut = null;
+		
+		try{
+			Query search = new Query("noMonSearch", new Term[] {this.stX, this.stY,
+					this.goalX, this.goalY, output});
+		    
+			@SuppressWarnings("rawtypes")
+			Hashtable gameDisplay = search.oneSolution(); //can change here to get more solutions etc. 
+					
+			if (gameDisplay != null) {
+			
+				System.out.println("\n(Raw Form) Moves= " +gameDisplay.get("Result"));
+			
+				String[] result = gameDisplay.get("Result").toString().split("\\s+");
+			
+				resultMovesOut = new int[result.length];
+														
+				for (int i=0; i < result.length-1; i++)
+				{
+					resultMovesOut[i] = Integer.parseInt(result[i].replaceAll("[\\D]", " ").trim());											
+				}
+				
+			}
+			else {
+				System.out.println("\n***Query Returned Empty***\n");
+			}
+			
+			search.close();	   
+		
+		} catch (NumberFormatException n) {
+			System.out.println("\n***Error Accessing Number***\n");
+			n.printStackTrace();
+		}
+		
+		return new GameMoves(resultMovesOut, new int[0]);
+	}
 } //end class Prolog2JavaGameMovesTransfer

@@ -15,6 +15,8 @@ public class Maze
 	if (mazeFile.isFile())	{
 		Prolog2JavaGameMovesTransfer transferMoves = new Prolog2JavaGameMovesTransfer(mazeFile);
 		
+		
+		transferMoves.loadFile();
 		//this is where the inputs for the game start will go
 		transferMoves.initPositions(1,5,5,1,2,3);
 		
