@@ -178,12 +178,14 @@ public class WumpusGame
 		if (prolog.isFile())
 		{
 			jpl = new Prolog2JavaGameMovesTransfer( prolog );
-			
 			jpl.initPositions( agentStartX, agentStartY, monsterStartX, monsterStartY, goldStartX, goldStartY );
-			
 			jpl.loadFile();
 			
 			moves = jpl.getGameMoves();
+			
+			gold = new Goal( goldStartX, goldStartY );
+			sword = new Sword( swordStartX, swordStartY );
+			
 			agent = new HumanAgent( moves.getHumanMoves(), gameBoard, "Dr.Bansal", gold, sword );
 			monster = new Agent( moves.getMonsterMoves(), gameBoard, "Wumpus");
 			
@@ -192,13 +194,9 @@ public class WumpusGame
 			Log.clear("Game Output");
 			Log.out("=-=-=-=-==-=-=-==-=-=-=-=-=-=-=-");
 			
-			
 			for( int i = 0; i < gameBoard.length; i ++ )
 				for( int ii = 0; ii <gameBoard[i].length; ii++ )
 					gameBoard[i][ii].setText("");
-			
-			gold = new Goal( goldStartX, goldStartY );
-			sword = new Sword( swordStartX, swordStartY );
 			
 			updateSquare( gameBoard[gold.getGoldX()][gold.getGoldY()], gold.getGoldX(), gold.getGoldY( ) );
 			updateSquare( gameBoard[sword.getSwordX()][sword.getSwordY()], sword.getSwordX( ), sword.getSwordY( ) ) ;
@@ -216,6 +214,7 @@ public class WumpusGame
 			monster.printMoves();
 			
 			monsterTurn = false;
+			goal = goldGoal;
 		}
 		
 	}
@@ -235,7 +234,15 @@ public class WumpusGame
 				prevY = agent.getY();
 				agent.move();
 				
-				agent.foundGold();
+				if( agent.foundGold() && !monster.isAlive() && !goal.equals(exitGoal))
+				{
+					goal = exitGoal;
+					moves = jpl.monsterDeadGetPathToGoal(agent.getX() + 1, agent.getY() + 1, exitX + 1, exitY + 1 );
+					
+					agent.setMoves(moves.getHumanMoves());
+					agent.setTurn( 2 );//We are already at the starting point which is zero
+					agent.printMoves();
+				}
 				agent.foundSword();
 				
 				updateSquare(gameBoard[prevX][prevY], prevX, prevY );
@@ -334,12 +341,28 @@ public class WumpusGame
 				updateSquare(gameBoard[monster.getX()][monster.getY()], monster.getX(), monster.getY() );
 				monster.setAlive( false );
 				clearStinkCloud( true );
-					
-				moves = jpl.monsterDeadGetPathToGoal(agent.getX() + 1, agent.getY() + 1, exitX + 1, exitY + 1 );
 				
-				agent.setMoves(moves.getHumanMoves());
-				agent.setTurn( 2 );//We are already at the starting point which is zero
-				agent.printMoves();
+				System.out.println( agent.hasGold() );
+				if( agent.hasGold() )
+				{
+					System.out.println("Headed home");
+					goal = exitGoal;
+					moves = jpl.monsterDeadGetPathToGoal(agent.getX() + 1, agent.getY() + 1, exitX + 1, exitY + 1 );
+					
+					agent.setMoves(moves.getHumanMoves());
+					agent.setTurn( 2 );//We are already at the starting point which is zero
+					agent.printMoves();
+				}
+				else
+				{
+					System.out.println("Don't have the gold headed there now");
+					goal = goldGoal;
+					moves = jpl.monsterDeadGetPathToGoal(agent.getX() + 1, agent.getY() + 1, goldStartX, goldStartY );
+					
+					agent.setMoves(moves.getHumanMoves());
+					agent.setTurn( 2 );//We are already at the starting point which is zero
+					agent.printMoves();
+				}
 				
 			}
 			else
