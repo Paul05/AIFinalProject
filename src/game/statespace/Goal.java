@@ -34,4 +34,9 @@ public class Goal
 			return false;
 	}
 	
+	public String toString()
+	{
+		return "Gold is at ( " + ( goldX + 1 ) + ", " + ( goldY + 1 ) + " )";
+	}
+	
 }

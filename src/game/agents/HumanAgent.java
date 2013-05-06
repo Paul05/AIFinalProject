@@ -1,35 +1,51 @@
 package game.agents;
 
 import game.statespace.Goal;
+import game.statespace.Sword;
 import gui.data.Log;
 import javafx.scene.control.TextArea;
 
 public class HumanAgent extends Agent
 {
 	private boolean armed;
+	private boolean foundGold;
 	private Goal gold;
+	private Sword sword;
 
-	public HumanAgent(int[] moves, TextArea[][] gameBoard, String name, Goal gold ) 
+	public HumanAgent(int[] moves, TextArea[][] gameBoard, String name, Goal gold, Sword sword ) 
 	{
 		super(moves, gameBoard, name );
 		armed = false;
+		foundGold = false;
 		this.gold = gold;
+		this.sword = sword;
 	}
 	
-	public boolean isRich() 
+	public boolean hasGold() 
 	{
-		if( gold.foundGold( getX(), getY()) )
+		return foundGold;
+	}
+	
+	public boolean foundGold() 
+	{
+		if( gold.foundGold( getX(), getY())  && !foundGold )
 		{
 			Log.out("$$ Found the Gold $$");
-			return true;
+			foundGold = true;
 		}
-		else
-		{
-			return false;
-		}
+		
+		return foundGold;
 	}
 
-	public boolean isArmed() 
+	public boolean foundSword() 
+	{
+		if( sword.foundSword( getX(), getY() ) )
+			setArmed( true );
+		
+		return isArmed();
+	}
+	
+	public boolean isArmed()
 	{
 		return armed;
 	}

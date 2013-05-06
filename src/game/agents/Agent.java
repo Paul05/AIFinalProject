@@ -87,7 +87,7 @@ public class Agent
 	{
 		if( (turn + 1) <= moves.length - 1)
 		{
-			gameBoard[x][y].setText("");
+			//gameBoard[x][y].setText("");
 			
 			x = moves[turn] - 1;
 			turn += 1;

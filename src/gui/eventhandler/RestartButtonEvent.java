@@ -15,7 +15,7 @@ public class RestartButtonEvent implements EventHandler<ActionEvent> {
 	@Override
 	public void handle(ActionEvent event) 
 	{
-		game.init();
+		game.init( false );
 	}
 
 }
